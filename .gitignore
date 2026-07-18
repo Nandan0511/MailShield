@@ -1,0 +1,18 @@
+# Secrets — never commit
+credentials.json
+tokens/
+.env
+# Local data
+database/*.db
+database/*.db-wal
+database/*.db-shm
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Models (usually large / regenerated)
+models/*.pkl
