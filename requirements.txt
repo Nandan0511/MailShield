@@ -1,0 +1,31 @@
+streamlit>=1.46.0
+
+# Google Gmail API & OAuth
+google-api-python-client>=2.176.0
+google-auth>=2.40.3
+google-auth-oauthlib>=1.2.2
+google-auth-httplib2>=0.2.0
+
+# Machine Learning
+scikit-learn>=1.7.1
+numpy>=2.3.1
+pandas>=2.3.1
+joblib>=1.5.1
+
+# HTML Parsing
+beautifulsoup4>=4.13.4
+lxml>=6.0.0
+
+# Visualization
+plotly>=6.2.0
+matplotlib>=3.10.3
+
+# Environment Variables
+python-dotenv>=1.1.1
+
+# Utilities
+requests>=2.32.4
+python-dateutil>=2.9.0.post0
+
+# Images
+Pillow>=11.3.0
