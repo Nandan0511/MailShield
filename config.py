@@ -40,10 +40,11 @@ SCOPES = [
 ]
 
 def get_redirect_uri():
-    try:
-        return st.secrets["GOOGLE_REDIRECT_URI_CLOUD"]
-    except Exception:
+    if os.path.exists(".streamlit/secrets.toml"):
+        # Running locally
         return GOOGLE_REDIRECT_URI_LOCAL
+
+    return GOOGLE_REDIRECT_URI_CLOUD
 # ---------------------------------------------------
 # TOKEN STORAGE
 # ---------------------------------------------------

@@ -50,9 +50,6 @@ def login_google():
         unsafe_allow_html=True,
     )
 def exchange_code(code):
-    """
-    Exchange authorization code for OAuth tokens.
-    """
 
     response = requests.post(
         TOKEN_ENDPOINT,
@@ -64,6 +61,9 @@ def exchange_code(code):
             "redirect_uri": get_redirect_uri(),
         },
     )
+
+    print("Status:", response.status_code)
+    print("Response:", response.text)
 
     response.raise_for_status()
 
