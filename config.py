@@ -40,11 +40,10 @@ SCOPES = [
 ]
 
 def get_redirect_uri():
-    return (
-        GOOGLE_REDIRECT_URI_CLOUD
-        if GOOGLE_REDIRECT_URI_CLOUD and os.getenv("STREAMLIT_RUNTIME") == "cloud"
-        else GOOGLE_REDIRECT_URI_LOCAL
-    )
+    try:
+        return st.secrets["GOOGLE_REDIRECT_URI_CLOUD"]
+    except Exception:
+        return GOOGLE_REDIRECT_URI_LOCAL
 # ---------------------------------------------------
 # TOKEN STORAGE
 # ---------------------------------------------------
