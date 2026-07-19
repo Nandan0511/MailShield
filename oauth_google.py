@@ -72,11 +72,10 @@ def login_google():
         + urllib.parse.urlencode(params)
     )
 
-    st.write("CLIENT_ID:", CLIENT_ID[:25] + "...")
-    st.write("REDIRECT:", get_redirect_uri())
-    st.code(auth_url)
-
-    st.stop()          # <-- TEMPORARY
+    st.markdown(
+    f'<meta http-equiv="refresh" content="0;url={auth_url}">',
+    unsafe_allow_html=True,
+)
 def exchange_code(code):
 
     response = requests.post(
