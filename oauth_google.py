@@ -71,10 +71,6 @@ def login_google():
         + "?"
         + urllib.parse.urlencode(params)
     )
-    st.markdown(
-        f'<meta http-equiv="refresh" content="0;url={auth_url}">',
-        unsafe_allow_html=True,
-    )
 
     st.write("CLIENT_ID:", CLIENT_ID[:25] + "...")
     st.write("REDIRECT:", get_redirect_uri())
