@@ -76,9 +76,9 @@ def login_google():
         unsafe_allow_html=True,
     )
 
-    # st.write("CLIENT_ID:", CLIENT_ID[:25] + "...")
-    # st.write("REDIRECT:", get_redirect_uri())
-    # st.code(auth_url)
+    st.write("CLIENT_ID:", CLIENT_ID[:25] + "...")
+    st.write("REDIRECT:", get_redirect_uri())
+    st.code(auth_url)
 
     # st.stop()          # <-- TEMPORARY
 def exchange_code(code):
