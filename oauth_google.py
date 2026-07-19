@@ -20,10 +20,37 @@ from config import (
 )
 
 
+# def login_google():
+#     """
+#     Redirect the user to Google's OAuth consent screen.
+#     """
+
+#     state = secrets.token_urlsafe(32)
+#     st.session_state["oauth_state"] = state
+
+#     params = {
+#         "client_id": CLIENT_ID,
+#         "redirect_uri": get_redirect_uri(),
+#         "response_type": "code",
+#         "scope": " ".join(SCOPES),
+#         "access_type": "offline",
+#         "prompt": "consent",
+#         "include_granted_scopes": "true",
+#         "state": state,
+#     }
+
+#     auth_url = (
+#         AUTHORIZATION_ENDPOINT
+#         + "?"
+#         + urllib.parse.urlencode(params)
+#     )
+
+#     st.markdown(
+#         f'<meta http-equiv="refresh" content="0;url={auth_url}">',
+#         unsafe_allow_html=True,
+#     )
+
 def login_google():
-    """
-    Redirect the user to Google's OAuth consent screen.
-    """
 
     state = secrets.token_urlsafe(32)
     st.session_state["oauth_state"] = state
@@ -44,13 +71,16 @@ def login_google():
         + "?"
         + urllib.parse.urlencode(params)
     )
-
     st.markdown(
         f'<meta http-equiv="refresh" content="0;url={auth_url}">',
         unsafe_allow_html=True,
     )
 
+    # st.write("CLIENT_ID:", CLIENT_ID[:25] + "...")
+    # st.write("REDIRECT:", get_redirect_uri())
+    # st.code(auth_url)
 
+    # st.stop()          # <-- TEMPORARY
 def exchange_code(code):
 
     response = requests.post(
