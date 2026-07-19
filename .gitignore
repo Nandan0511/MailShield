@@ -13,6 +13,3 @@ __pycache__/
 *.pyc
 .venv/
 venv/
-
-# Models (usually large / regenerated)
-models/*.pkl

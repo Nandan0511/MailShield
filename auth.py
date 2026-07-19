@@ -83,15 +83,32 @@ def authenticate_gmail():
 
             except:
 
-                flow = (
-                    InstalledAppFlow
-                    .from_client_secrets_file(
+                client_config = {
+                    "installed": {
+                        "client_id": st.secrets["GOOGLE_CLIENT_ID"],
+                        "client_secret": st.secrets["GOOGLE_CLIENT_SECRET"],
+                        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                        "token_uri": "https://oauth2.googleapis.com/token",
+                        "redirect_uris": [
+                            "http://localhost"
+                        ]
+                    }
+                }
 
-                        "credentials.json",
-
-                        SCOPES
-                    )
+                flow = InstalledAppFlow.from_client_config(
+                    client_config,
+                    SCOPES
                 )
+
+                # flow = (
+                #     InstalledAppFlow
+                #     .from_client_secrets_file(
+
+                #         "credentials.json",
+
+                #         SCOPES
+                #     )
+                # )
 
                 with st.spinner(
                     "🔐 Opening Google Login..."
