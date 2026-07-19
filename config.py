@@ -1,23 +1,50 @@
-# config.py
-
 from datetime import datetime
-
 from dotenv import load_dotenv
-
+import streamlit as st
 import os
 
 load_dotenv()
 
+
+def get_config(key, default=None):
+    """
+    Priority:
+    1. Streamlit secrets (Cloud)
+    2. Environment variables (.env)
+    """
+
+    try:
+        return st.secrets[key]
+    except Exception:
+        return os.getenv(key, default)
+
+AUTHORIZATION_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth"
+TOKEN_ENDPOINT = "https://oauth2.googleapis.com/token"
 # ---------------------------------------------------
 # GOOGLE OAUTH
 # ---------------------------------------------------
+CLIENT_ID = get_config("GOOGLE_CLIENT_ID")
+CLIENT_SECRET = get_config("GOOGLE_CLIENT_SECRET")
+
+GOOGLE_REDIRECT_URI_LOCAL = get_config(
+    "GOOGLE_REDIRECT_URI_LOCAL",
+    "http://localhost:8501",
+)
+
+GOOGLE_REDIRECT_URI_CLOUD = get_config(
+    "GOOGLE_REDIRECT_URI_CLOUD",
+)
+
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.modify"
 ]
-CLIENT_ID = os.getenv( "GOOGLE_CLIENT_ID" )
-CLIENT_SECRET = os.getenv( "GOOGLE_CLIENT_SECRET" )
 
-
+def get_redirect_uri():
+    return (
+        GOOGLE_REDIRECT_URI_CLOUD
+        if GOOGLE_REDIRECT_URI_CLOUD and os.getenv("STREAMLIT_RUNTIME") == "cloud"
+        else GOOGLE_REDIRECT_URI_LOCAL
+    )
 # ---------------------------------------------------
 # TOKEN STORAGE
 # ---------------------------------------------------
