@@ -80,7 +80,7 @@ def login_google():
     st.write("REDIRECT:", get_redirect_uri())
     st.code(auth_url)
 
-    # st.stop()          # <-- TEMPORARY
+    st.stop()          # <-- TEMPORARY
 def exchange_code(code):
 
     response = requests.post(
