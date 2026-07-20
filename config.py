@@ -39,23 +39,6 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.modify"
 ]
 
-# def get_redirect_uri():
-#     if os.path.exists(".streamlit/secrets.toml"):
-#         # Running locally
-#         return GOOGLE_REDIRECT_URI_LOCAL
-
-#     return GOOGLE_REDIRECT_URI_CLOUD
-# def get_redirect_uri():
-#     try:
-#         cloud_uri = st.secrets["GOOGLE_REDIRECT_URI_CLOUD"]
-
-#         if cloud_uri:
-#             return cloud_uri
-
-#     except Exception:
-#         pass
-
-#     return GOOGLE_REDIRECT_URI_LOCAL
 
 def get_redirect_uri():
     if get_config("APP_ENV") == "cloud":
