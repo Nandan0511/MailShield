@@ -45,16 +45,21 @@ SCOPES = [
 #         return GOOGLE_REDIRECT_URI_LOCAL
 
 #     return GOOGLE_REDIRECT_URI_CLOUD
+# def get_redirect_uri():
+#     try:
+#         cloud_uri = st.secrets["GOOGLE_REDIRECT_URI_CLOUD"]
+
+#         if cloud_uri:
+#             return cloud_uri
+
+#     except Exception:
+#         pass
+
+#     return GOOGLE_REDIRECT_URI_LOCAL
+
 def get_redirect_uri():
-    try:
-        cloud_uri = st.secrets["GOOGLE_REDIRECT_URI_CLOUD"]
-
-        if cloud_uri:
-            return cloud_uri
-
-    except Exception:
-        pass
-
+    if get_config("APP_ENV") == "cloud":
+        return GOOGLE_REDIRECT_URI_CLOUD
     return GOOGLE_REDIRECT_URI_LOCAL
 # ---------------------------------------------------
 # TOKEN STORAGE
