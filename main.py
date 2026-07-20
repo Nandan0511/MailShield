@@ -1,7 +1,7 @@
 # mailshield/main_app.py
 
 import streamlit as st
-
+from utils.cookies import cookies
 # ---------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------
@@ -13,7 +13,8 @@ st.set_page_config(
 
     layout="wide"
 )
-
+if not cookies.ready():
+    st.stop()
 from datetime import datetime
 
 # ---------------------------------------------------

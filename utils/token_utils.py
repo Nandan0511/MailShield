@@ -49,20 +49,24 @@ def decode_path_to_email(
 # ---------------------------------------------------
 # GET TOKEN PATH
 # ---------------------------------------------------
-def get_token_path(
-    email: str
-) -> str:
+# def get_token_path(
+#     email: str
+# ) -> str:
 
-    safe_email = encode_email_for_path(
-        email
-    )
+#     safe_email = encode_email_for_path(
+#         email
+#     )
 
-    return os.path.join(
-        TOKEN_DIR,
-        safe_email,
-        "token.json"
-    )
-
+#     return os.path.join(
+#         TOKEN_DIR,
+#         safe_email,
+#         "token.json"
+#     )
+def get_token_path(device_id: str, email: str = None) -> str:
+    if email:
+        safe_email = encode_email_for_path(email)
+        return os.path.join(TOKEN_DIR, device_id, safe_email, "token.json")
+    return os.path.join(TOKEN_DIR, device_id, "token.json")
 
 # ---------------------------------------------------
 # ENSURE TOKEN DIR

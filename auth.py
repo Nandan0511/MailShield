@@ -61,34 +61,46 @@ def build_gmail_service(creds):
 # ---------------------------------------------------
 # SAVE / LOAD TOKEN ON DISK
 # ---------------------------------------------------
-def save_token(email, creds):
+# def save_token(email, creds):
 
-    token_path = get_token_path(email)
+#     token_path = get_token_path(email)
 
-    os.makedirs(
-        os.path.dirname(token_path),
-        exist_ok=True,
-    )
+#     os.makedirs(
+#         os.path.dirname(token_path),
+#         exist_ok=True,
+#     )
 
-    with open(token_path, "w") as token_file:
+#     with open(token_path, "w") as token_file:
 
-        token_file.write(creds.to_json())
+#         token_file.write(creds.to_json())
 
-    clean_duplicate_tokens_safe()
+#     clean_duplicate_tokens_safe()
 
 
-def load_saved_token(email):
+# def load_saved_token(email):
 
-    token_path = get_token_path(email)
+#     token_path = get_token_path(email)
 
+#     if not os.path.exists(token_path):
+#         return None
+
+#     return Credentials.from_authorized_user_file(
+#         token_path,
+#         SCOPES,
+#     )
+
+
+def save_token(device_id, email, creds):
+    token_path = get_token_path(device_id, email)
+    os.makedirs(os.path.dirname(token_path), exist_ok=True)
+    with open(token_path, "w") as f:
+        f.write(creds.to_json())
+
+def load_saved_token(device_id, email):
+    token_path = get_token_path(device_id, email)
     if not os.path.exists(token_path):
         return None
-
-    return Credentials.from_authorized_user_file(
-        token_path,
-        SCOPES,
-    )
-
+    return Credentials.from_authorized_user_file(token_path, SCOPES)
 
 def refresh_saved_token(creds):
 
@@ -129,9 +141,9 @@ def authenticate_gmail():
         # -------------------------------------------
         if not creds:
 
-            temp_email = st.session_state.get("email", "")
-
-            creds = load_saved_token(temp_email)
+            device_id = st.session_state.get("device_id")
+            active_email = st.session_state.get("email", "")
+            creds = load_saved_token(device_id , active_email)
 
         if not creds:
 
@@ -181,7 +193,8 @@ def authenticate_gmail():
         # -------------------------------------------
         # SAVE TOKEN
         # -------------------------------------------
-        save_token(email, creds)
+        device_id = st.session_state.get("device_id")
+        save_token(device_id,email, creds)
 
         # -------------------------------------------
         # UPDATE ACCOUNTS
@@ -243,99 +256,64 @@ def get_gmail_service(email=""):
 # LOAD EXISTING ACCOUNT SERVICE
 # ---------------------------------------------------
 def load_account_service(email):
-
     try:
-
-        creds = load_saved_token(email)
+        device_id = st.session_state.get("device_id")
+        creds = load_saved_token(device_id, email)
 
         if not creds:
-
             st.error("❌ Token not found.")
-
             return None
 
         creds = refresh_saved_token(creds)
-
         service = build_gmail_service(creds)
-
         return service
 
     except Exception as e:
-
         st.error(f"❌ Failed loading account: {e}")
-
         return None
-
 
 # ---------------------------------------------------
 # AUTO LOGIN
 # ---------------------------------------------------
+# AFTER
 def auto_login():
-
     if (
         not st.session_state.get("logged_in", False)
         and not st.session_state.get("auto_login_checked", False)
         and st.session_state.get("accounts", [])
     ):
+        device_id = st.session_state.get("device_id")
 
         for saved_email in st.session_state.accounts:
-
             try:
-
-                creds = load_saved_token(saved_email)
-
+                creds = load_saved_token(device_id, saved_email)
                 if not creds:
                     continue
 
-                # -------------------------------
-                # REFRESH TOKEN
-                # -------------------------------
                 if creds.expired and creds.refresh_token:
-
                     try:
-
                         creds.refresh(Request())
-
                     except Exception:
-
                         continue
 
-                # -------------------------------
-                # VALID TOKEN
-                # -------------------------------
                 if creds.valid:
-
-                    save_token(saved_email, creds)
-
+                    save_token(device_id, saved_email, creds)
                     service = build_gmail_service(creds)
 
                     st.session_state.email = saved_email
-
-                    st.session_state.user_id = (
-                        saved_email.split("@")[0].capitalize()
-                    )
-
+                    st.session_state.user_id = saved_email.split("@")[0].capitalize()
                     st.session_state.service = service
-
-                    st.session_state.oauth_token = json.loads(
-                        creds.to_json()
-                    )
-
+                    st.session_state.oauth_token = json.loads(creds.to_json())
                     st.session_state.logged_in = True
-
                     st.session_state.fetch_on_login = True
 
                     st.toast(f"✅ Auto-logged in as {saved_email}")
-
                     break
 
             except Exception:
-
                 continue
 
         st.session_state.auto_login_checked = True
-
-
 # ---------------------------------------------------
 # LOGOUT
 # ---------------------------------------------------
@@ -371,17 +349,17 @@ def logout(remember_me=True):
 
     if not remember_me:
 
-        email = st.session_state.get("email", "")
-
-        token_path = get_token_path(email)
+        device_id = st.session_state.get("device_id")
+        current_email = st.session_state.get("email", "")
+        token_path = get_token_path(device_id,current_email)
 
         if os.path.exists(token_path):
 
             os.remove(token_path)
 
-        if email in st.session_state.get("accounts", []):
+        if current_email in st.session_state.get("accounts", []):
 
-            st.session_state.accounts.remove(email)
+            st.session_state.accounts.remove(current_email)
 
     if "oauth_token" in st.session_state:
 
