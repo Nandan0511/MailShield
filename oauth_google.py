@@ -50,8 +50,33 @@ from config import (
 #         unsafe_allow_html=True,
 #     )
 
-def login_google():
+# def login_google():
 
+#     state = secrets.token_urlsafe(32)
+#     st.session_state["oauth_state"] = state
+
+#     params = {
+#         "client_id": CLIENT_ID,
+#         "redirect_uri": get_redirect_uri(),
+#         "response_type": "code",
+#         "scope": " ".join(SCOPES),
+#         "access_type": "offline",
+#         "prompt": "consent",
+#         "include_granted_scopes": "true",
+#         "state": state,
+#     }
+
+#     auth_url = (
+#         AUTHORIZATION_ENDPOINT
+#         + "?"
+#         + urllib.parse.urlencode(params)
+#     )
+
+#     st.markdown(
+#     f'<meta http-equiv="refresh" content="0;url={auth_url}">',
+#     unsafe_allow_html=True,
+# )
+def login_google():
     state = secrets.token_urlsafe(32)
     st.session_state["oauth_state"] = state
 
@@ -66,16 +91,10 @@ def login_google():
         "state": state,
     }
 
-    auth_url = (
-        AUTHORIZATION_ENDPOINT
-        + "?"
-        + urllib.parse.urlencode(params)
-    )
+    auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
 
-    st.markdown(
-    f'<meta http-equiv="refresh" content="0;url={auth_url}">',
-    unsafe_allow_html=True,
-)
+    st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
+    
 def exchange_code(code):
 
     response = requests.post(
