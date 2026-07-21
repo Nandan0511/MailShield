@@ -1,6 +1,6 @@
 import secrets
 import urllib.parse
-
+import streamlit.components.v1 as components
 import streamlit as st
 import requests
 
@@ -38,26 +38,42 @@ def login_google():
     auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
     st.code(auth_url)
 
-    # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
-    st.markdown(
+    components.html(
     f"""
-    <a href="{auth_url}" target="_top" style="
-        display: inline-block;
-        width: 100%;
-        text-align: center;
-        padding: 0.5rem 1rem;
-        background-color: rgb(19, 23, 32);
-        color: white;
-        border: 1px solid rgba(250, 250, 250, 0.2);
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 500;
-    ">
+    <button
+        style="
+            width:100%;
+            padding:10px;
+            border-radius:8px;
+            cursor:pointer;
+        "
+        onclick="window.location.href='{auth_url}'">
         🔐 Connect Gmail
-    </a>
+    </button>
     """,
-    unsafe_allow_html=True,
+    height=60,
 )
+
+    # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
+#     st.markdown(
+#     f"""
+#     <a href="{auth_url}" target="_top" style="
+#         display: inline-block;
+#         width: 100%;
+#         text-align: center;
+#         padding: 0.5rem 1rem;
+#         background-color: rgb(19, 23, 32);
+#         color: white;
+#         border: 1px solid rgba(250, 250, 250, 0.2);
+#         border-radius: 8px;
+#         text-decoration: none;
+#         font-weight: 500;
+#     ">
+#         🔐 Connect Gmail
+#     </a>
+#     """,
+#     unsafe_allow_html=True,
+# )
 
 def exchange_code(code):
 
