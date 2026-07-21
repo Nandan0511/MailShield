@@ -5,22 +5,18 @@ import time
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-
 from concurrent.futures import ThreadPoolExecutor
-
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
-
 from config import SCOPES
-
 from classifier import (
     classify_message,
     load_model_and_vectorizer
 )
 
-from utils.session import (
-    initialize_session_state
-)
+# from utils.session import (
+#     initialize_session_state
+# )
 
 from utils.token_utils import (
     get_token_path
@@ -30,7 +26,7 @@ from utils.email_utils import (
     batch_get_email_contents
 )
 
-initialize_session_state()
+# initialize_session_state()
 
 
 # ---------------------------------------------------
@@ -49,7 +45,7 @@ def fetch_account_stats(
     email_limit=50
 ):
 
-    token_path = get_token_path(email)
+    token_path = get_token_path(st.session_state.get("device_id"), email)
 
     if not os.path.exists(token_path):
 
@@ -177,6 +173,7 @@ def fetch_account_stats(
             "Total": 0,
             "Error": str(e)
         }
+
 
 
 # ---------------------------------------------------

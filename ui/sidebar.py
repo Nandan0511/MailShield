@@ -11,9 +11,9 @@ from auth import (
     clear_session
 )
 from oauth_google import login_google
-from utils.session import (
-    initialize_session_state
-)
+# from utils.session import (
+#     initialize_session_state
+# )
 
 from utils.token_utils import (
     remove_readonly
@@ -22,7 +22,7 @@ from utils.token_utils import (
 # ---------------------------------------------------
 # INITIALIZE SESSION
 # ---------------------------------------------------
-initialize_session_state()
+# initialize_session_state()
 
 
 # ===================================================

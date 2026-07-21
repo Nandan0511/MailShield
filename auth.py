@@ -22,11 +22,11 @@ from utils.token_utils import (
     clean_duplicate_tokens_safe,
 )
 
-from utils.session import (
-    initialize_session_state,
-)
+# from utils.session import (
+#     initialize_session_state,
+# )
 
-initialize_session_state()
+# initialize_session_state()
 
 # ---------------------------------------------------
 # BUILD CREDENTIALS FROM AN OAUTH TOKEN DICT

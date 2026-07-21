@@ -19,63 +19,6 @@ from config import (
     get_redirect_uri,
 )
 
-
-# def login_google():
-#     """
-#     Redirect the user to Google's OAuth consent screen.
-#     """
-
-#     state = secrets.token_urlsafe(32)
-#     st.session_state["oauth_state"] = state
-
-#     params = {
-#         "client_id": CLIENT_ID,
-#         "redirect_uri": get_redirect_uri(),
-#         "response_type": "code",
-#         "scope": " ".join(SCOPES),
-#         "access_type": "offline",
-#         "prompt": "consent",
-#         "include_granted_scopes": "true",
-#         "state": state,
-#     }
-
-#     auth_url = (
-#         AUTHORIZATION_ENDPOINT
-#         + "?"
-#         + urllib.parse.urlencode(params)
-#     )
-
-#     st.markdown(
-#         f'<meta http-equiv="refresh" content="0;url={auth_url}">',
-#         unsafe_allow_html=True,
-#     )
-
-# def login_google():
-
-#     state = secrets.token_urlsafe(32)
-#     st.session_state["oauth_state"] = state
-
-#     params = {
-#         "client_id": CLIENT_ID,
-#         "redirect_uri": get_redirect_uri(),
-#         "response_type": "code",
-#         "scope": " ".join(SCOPES),
-#         "access_type": "offline",
-#         "prompt": "consent",
-#         "include_granted_scopes": "true",
-#         "state": state,
-#     }
-
-#     auth_url = (
-#         AUTHORIZATION_ENDPOINT
-#         + "?"
-#         + urllib.parse.urlencode(params)
-#     )
-
-#     st.markdown(
-#     f'<meta http-equiv="refresh" content="0;url={auth_url}">',
-#     unsafe_allow_html=True,
-# )
 def login_google():
     state = secrets.token_urlsafe(32)
     st.session_state["oauth_state"] = state
@@ -93,8 +36,27 @@ def login_google():
 
     auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
 
-    st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
-    
+    # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
+    st.markdown(
+    f"""
+    <a href="{auth_url}" target="_self" style="
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 1rem;
+        background-color: rgb(19, 23, 32);
+        color: white;
+        border: 1px solid rgba(250, 250, 250, 0.2);
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+    ">
+        🔐 Connect Gmail
+    </a>
+    """,
+    unsafe_allow_html=True,
+)
+
 def exchange_code(code):
 
     response = requests.post(
@@ -114,6 +76,14 @@ def exchange_code(code):
     response.raise_for_status()
 
     return response.json()
+# ---------------------------------------------------
+# GLOBAL IDEMPOTENCY GUARD (shared across all sessions)
+# Prevents the same authorization code from ever being
+# exchanged twice, even if multiple browser
+# sessions/reruns see it (prefetch, reconnect, etc).
+# ---------------------------------------------------
+_used_codes = set()
+
 
 def handle_callback():
 
@@ -125,26 +95,30 @@ def handle_callback():
     if not code:
         return
 
-    saved_state = st.session_state.get("oauth_state")
-
-    # Validate only if the state survived
-    if saved_state is not None and state != saved_state:
-        st.error("OAuth state mismatch.")
+    if code in _used_codes:
+        st.query_params.clear()
         return
+
+    _used_codes.add(code)
+
+    saved_state = st.session_state.get("oauth_state")
 
     try:
 
-        token = exchange_code(code)
+        if saved_state is not None and state != saved_state:
+            st.error("OAuth state mismatch.")
+            return
 
+        token = exchange_code(code)
 
         st.session_state["oauth_token"] = token
         st.session_state["oauth_callback"] = True
 
-        # Prevent callback from executing again
-        st.query_params.clear()
-
-        st.rerun()
-
     except Exception as e:
 
         st.exception(e)
+
+    finally:
+
+        st.query_params.clear()
+        st.rerun()

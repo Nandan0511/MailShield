@@ -1,7 +1,6 @@
 # mailshield/main_app.py
 
 import streamlit as st
-from utils.cookies import cookies
 # ---------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------
@@ -13,8 +12,7 @@ st.set_page_config(
 
     layout="wide"
 )
-if not cookies.ready():
-    st.stop()
+
 from datetime import datetime
 
 # ---------------------------------------------------
@@ -145,6 +143,29 @@ if (
     auto_login()
 
     st.session_state.auto_login_checked = True
+
+
+# st.write("### 🔧 DEBUG INFO")
+# st.write("logged_in:", st.session_state.get("logged_in", False))
+# st.write("oauth_token present:", bool(st.session_state.get("oauth_token")))
+# st.write("oauth_callback:", st.session_state.get("oauth_callback", False))
+# st.write("logout_triggered:", st.session_state.get("logout_triggered", False))
+# st.write("switching_account:", st.session_state.get("switching_account", False))
+# st.write("device_id:", st.session_state.get("device_id"))
+# st.write("accounts:", st.session_state.get("accounts"))
+# st.write("---")
+
+# if (
+#     not st.session_state.get("logged_in", False)
+#     and st.session_state.get("oauth_token")
+#     and not st.session_state.get("logout_triggered", False)
+#     and not st.session_state.get("switching_account", False)
+# ):
+#     st.write("✅ Condition PASSED — calling authenticate_gmail()")
+#     authenticate_gmail()
+#     st.write("Result — logged_in now:", st.session_state.get("logged_in"))
+# else:
+#     st.write("❌ Condition FAILED — authenticate_gmail() NOT called")
 # ---------------------------------------------------
 # COMPLETE OAUTH LOGIN
 # (runs on the rerun right after login_button() grants

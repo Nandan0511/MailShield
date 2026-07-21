@@ -20,9 +20,9 @@ from database.queries import (
     save_email_scans_batch,
 )
 
-from utils.session import (
-    initialize_session_state
-)
+# from utils.session import (
+#     initialize_session_state
+# )
 
 from utils.email_utils import (
     batch_get_email_contents,
@@ -38,8 +38,9 @@ from utils.logger import (
     log_error
 )
 
-initialize_session_state()
 
+
+# initialize_session_state()
 
 # ---------------------------------------------------
 # SAFE API RETRY
