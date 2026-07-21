@@ -1,7 +1,9 @@
-import traceback
+from config import (
+    CLIENT_ID,
+    SCOPES,
 
-try:
-    from ui import multi_insights
-    print("OK")
-except Exception:
-    traceback.print_exc()
+    get_redirect_uri,
+)
+print("CLIENT_ID:", CLIENT_ID)
+print("REDIRECT_URI:", get_redirect_uri())
+print("SCOPES:", SCOPES)

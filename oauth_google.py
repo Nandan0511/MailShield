@@ -12,16 +12,13 @@ from config import (
     TOKEN_ENDPOINT,
     get_redirect_uri,
 )
-from config import (
-    CLIENT_ID,
-    SCOPES,
-    AUTHORIZATION_ENDPOINT,
-    get_redirect_uri,
-)
 
 def login_google():
     state = secrets.token_urlsafe(32)
     st.session_state["oauth_state"] = state
+    st.write("CLIENT_ID:", CLIENT_ID)
+    st.write("REDIRECT_URI:", get_redirect_uri())
+    st.write("SCOPES:", SCOPES)
 
     params = {
         "client_id": CLIENT_ID,
