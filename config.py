@@ -35,14 +35,10 @@ GOOGLE_REDIRECT_URI_CLOUD = get_config(
     "GOOGLE_REDIRECT_URI_CLOUD",
 )
 
-# SCOPES = [
-#     "https://www.googleapis.com/auth/gmail.modify"
-# ]
 SCOPES = [
-    "openid",
-    "email",
-    "profile"
+    "https://www.googleapis.com/auth/gmail.modify"
 ]
+
 
 
 def get_redirect_uri():
