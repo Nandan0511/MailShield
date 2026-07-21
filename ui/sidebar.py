@@ -344,9 +344,22 @@ def render_login_panel():
             if st.button(
                 "🔗 Connect Gmail",
                 key="google_oauth_add_new",
-                 use_container_width=True,
+                use_container_width=True,
             ):
-                login_google()
+                auth_url = login_google()
+
+                st.link_button(
+                    "🔐 Continue with Google",
+                    auth_url,
+                    use_container_width=True,
+            )
+
+            # if st.button(
+            #     "🔗 Connect Gmail",
+            #     key="google_oauth_add_new",
+            #      use_container_width=True,
+            # ):
+            #     login_google()
 
     # -----------------------------------------------
     # FIRST LOGIN (fresh Google login → OAuth popup)
