@@ -32,6 +32,7 @@ def login_google():
     }
 
     auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
+    print("Auth URL:", auth_url)
 
     # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
     st.markdown(
