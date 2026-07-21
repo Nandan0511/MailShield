@@ -11,11 +11,14 @@ from config import (
     AUTHORIZATION_ENDPOINT,
     TOKEN_ENDPOINT,
     get_redirect_uri,
+    get_config,
 )
 
 def login_google():
     state = secrets.token_urlsafe(32)
     st.session_state["oauth_state"] = state
+    
+    st.write("APP_ENV =", get_config("APP_ENV"))
     st.write("CLIENT_ID:", CLIENT_ID)
     st.write("REDIRECT_URI:", get_redirect_uri())
     st.write("SCOPES:", SCOPES)
