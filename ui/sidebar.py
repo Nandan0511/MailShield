@@ -384,7 +384,14 @@ def render_login_panel():
             key="google_oauth_first",
             use_container_width=True,
         ):
-            login_google()
+            # login_google()
+            if st.button("🔗 Connect First Gmail Account"):
+                auth_url = login_google()
+                st.link_button(
+                    "🔐 Continue with Google",
+                    auth_url,
+                    use_container_width=True,
+                )
 
 
 # ===================================================

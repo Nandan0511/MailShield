@@ -14,15 +14,48 @@ from config import (
     get_config,
 )
 
+# def login_google():
+#     state = secrets.token_urlsafe(32)
+#     st.session_state["oauth_state"] = state
+    
+#     st.write("APP_ENV =", get_config("APP_ENV"))
+#     st.write("CLIENT_ID:", CLIENT_ID)
+#     st.write("REDIRECT_URI:", get_redirect_uri())
+#     st.write("SCOPES:", SCOPES)
+#     st.write("SCOPES USED:", SCOPES)
+
+#     params = {
+#         "client_id": CLIENT_ID,
+#         "redirect_uri": get_redirect_uri(),
+#         "response_type": "code",
+#         "scope": " ".join(SCOPES),
+#         "access_type": "offline",
+#         "prompt": "consent",
+#         "include_granted_scopes": "true",
+#         "state": state,
+#     }
+
+#     auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
+#     st.code(auth_url)
+
+#     components.html(
+#     f"""
+#     <button
+#         style="
+#             width:100%;
+#             padding:10px;
+#             border-radius:8px;
+#             cursor:pointer;
+#         "
+#         onclick="window.location.href='{auth_url}'">
+#         🔐 Connect Gmail
+#     </button>
+#     """,
+#     height=60,
+# )
 def login_google():
     state = secrets.token_urlsafe(32)
     st.session_state["oauth_state"] = state
-    
-    st.write("APP_ENV =", get_config("APP_ENV"))
-    st.write("CLIENT_ID:", CLIENT_ID)
-    st.write("REDIRECT_URI:", get_redirect_uri())
-    st.write("SCOPES:", SCOPES)
-    st.write("SCOPES USED:", SCOPES)
 
     params = {
         "client_id": CLIENT_ID,
@@ -35,25 +68,7 @@ def login_google():
         "state": state,
     }
 
-    auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
-    st.code(auth_url)
-
-    components.html(
-    f"""
-    <button
-        style="
-            width:100%;
-            padding:10px;
-            border-radius:8px;
-            cursor:pointer;
-        "
-        onclick="window.location.href='{auth_url}'">
-        🔐 Connect Gmail
-    </button>
-    """,
-    height=60,
-)
-
+    return AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
     # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
 #     st.markdown(
 #     f"""
