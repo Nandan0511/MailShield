@@ -22,6 +22,7 @@ def login_google():
     st.write("CLIENT_ID:", CLIENT_ID)
     st.write("REDIRECT_URI:", get_redirect_uri())
     st.write("SCOPES:", SCOPES)
+    st.write("SCOPES USED:", SCOPES)
 
     params = {
         "client_id": CLIENT_ID,
