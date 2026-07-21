@@ -41,7 +41,7 @@ def login_google():
     # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
     st.markdown(
     f"""
-    <a href="{auth_url}" target="_self" style="
+    <a href="{auth_url}" target="_top" style="
         display: inline-block;
         width: 100%;
         text-align: center;
