@@ -68,7 +68,9 @@ def login_google():
         "state": state,
     }
 
-    return AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
+    auth_url = AUTHORIZATION_ENDPOINT + "?" + urllib.parse.urlencode(params)
+
+    return auth_url
     # st.link_button("🔐 Connect Gmail", auth_url, use_container_width=True)
 #     st.markdown(
 #     f"""
