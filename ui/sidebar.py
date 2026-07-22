@@ -354,7 +354,7 @@ def render_login_panel():
     # 2. Render an HTML link styled like a Streamlit button that breaks out to the top window
     st.markdown(
         f"""
-        <a href="{auth_url}" target="_top" style="text-decoration: none;">
+        <a href="{auth_url}" target="_top" style="text-decoration: none; display: block; width: 100%;">
             <div style="
                 display: flex;
                 align-items: center;
