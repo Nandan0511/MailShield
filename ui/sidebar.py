@@ -379,7 +379,6 @@ def render_login_panel():
 
     st.markdown("### 👥 Gmail Accounts")
 
-    # Flag to determine if we should render the OAuth button
     show_oauth_button = False
 
     if accounts:
@@ -392,15 +391,13 @@ def render_login_panel():
         if selected != "➕ Add New Gmail":
             if st.button("🔐 Login", use_container_width=True):
                 login_account(selected)
-            return  # Stop here if an existing account is chosen
+            return
         else:
-            # User explicitly chose "➕ Add New Gmail"
             show_oauth_button = True
     else:
         st.info("No Gmail accounts linked yet.")
         show_oauth_button = True
 
-    # Render OAuth button whenever show_oauth_button is True
     if show_oauth_button:
         button_text = (
             "🔗 Connect Gmail"
@@ -410,29 +407,31 @@ def render_login_panel():
 
         auth_url = login_google()
 
-        st.markdown(
-            f"""
-            <a href="{auth_url}" target="_top" style="text-decoration: none; display: block; width: 100%;">
-                <div style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 100%;
-                    background-color: #FF4B4B;
-                    color: white;
-                    padding: 10px;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    text-align: center;
-                    box-sizing: border-box;
-                    cursor: pointer;
-                ">
-                    {button_text}
-                </div>
-            </a>
-            """,
-            unsafe_allow_html=True,
-        )
+        # Render a clickable HTML button powered by JavaScript top-level redirect
+        html_code = f"""
+        <div style="font-family: sans-serif; width: 100%;">
+            <button onclick="window.top.location.href='{auth_url}';" style="
+                width: 100%;
+                background-color: #FF4B4B;
+                color: white;
+                padding: 10px 16px;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            "
+            onmouseover="this.style.backgroundColor='#E03E3E';"
+            onmouseout="this.style.backgroundColor='#FF4B4B';"
+            >
+                {button_text}
+            </button>
+        </div>
+        """
+
+        components.html(html_code, height=50)
+
 # ===================================================
 # SESSION EXPIRED PANEL
 # ===================================================
