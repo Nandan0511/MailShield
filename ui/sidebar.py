@@ -350,7 +350,7 @@ def render_login_panel():
 
                 st.markdown(
                     f"""
-        <a href="{auth_url}" target="_top" style="
+        <a href="{auth_url}" target="mailshield_oauth" style="
             display: inline-block;
             width: 100%;
             text-align: center;
@@ -422,7 +422,7 @@ def render_login_panel():
 
             st.markdown(
         f"""
-        <a href="{auth_url}" target="_top" style="
+        <a href="{auth_url}" target="mailshield_oauth" style="
             display: inline-block;
             width: 100%;
             text-align: center;
