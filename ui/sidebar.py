@@ -348,18 +348,39 @@ def render_login_panel():
             ):
                 auth_url = login_google()
 
-                st.link_button(
-                    "🔐 Continue with Google",
-                    auth_url,
-                    use_container_width=True,
-            )
+                st.markdown(
+                    f"""
+        <a href="{auth_url}" target="_self" style="
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background-color: rgb(19, 23, 32);
+            color: white;
+            border: 1px solid rgba(250, 250, 250, 0.2);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        ">
+            🔐 Continue with Google
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
 
             # if st.button(
             #     "🔗 Connect Gmail",
             #     key="google_oauth_add_new",
-            #      use_container_width=True,
+            #     use_container_width=True,
             # ):
-            #     login_google()
+            #     auth_url = login_google()
+
+            #     st.link_button(
+            #         "🔐 Continue with Google",
+            #         auth_url,
+            #         use_container_width=True,
+            # )
+
 
     # -----------------------------------------------
     # FIRST LOGIN (fresh Google login → OAuth popup)
@@ -393,25 +414,44 @@ def render_login_panel():
         )
 
         if st.button(
-           "🔗 Connect First Gmail Account",
-           key="google_oauth_first",
-           use_container_width=True,
-        ):
+   "🔗 Connect First Gmail Account",
+   key="google_oauth_first",
+   use_container_width=True,
+):
             auth_url = login_google()
 
-            st.link_button(
-        "🔐 Continue with Google",
-        auth_url,
-        use_container_width=True,
+            st.markdown(
+        f"""
+        <a href="{auth_url}" target="_self" style="
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background-color: rgb(19, 23, 32);
+            color: white;
+            border: 1px solid rgba(250, 250, 250, 0.2);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        ">
+            🔐 Continue with Google
+        </a>
+        """,
+        unsafe_allow_html=True,
     )
 
-        # if st.button(
-        #     "🔗 Connect First Gmail Account",
-        #     key="google_oauth_first",
-        #     use_container_width=True,
-        # ):
-        #     login_google()
+    #     if st.button(
+    #        "🔗 Connect First Gmail Account",
+    #        key="google_oauth_first",
+    #        use_container_width=True,
+    #     ):
+    #         auth_url = login_google()
 
+    #         st.link_button(
+    #     "🔐 Continue with Google",
+    #     auth_url,
+    #     use_container_width=True,
+    # )
 
 
 # ===================================================
