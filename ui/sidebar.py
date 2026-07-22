@@ -407,30 +407,29 @@ def render_login_panel():
 
         auth_url = login_google()
 
-        # Render a clickable HTML button powered by JavaScript top-level redirect
-        html_code = f"""
-        <div style="font-family: sans-serif; width: 100%;">
-            <button onclick="window.top.location.href='{auth_url}';" style="
-                width: 100%;
-                background-color: #FF4B4B;
-                color: white;
-                padding: 10px 16px;
-                border: none;
-                border-radius: 8px;
-                font-weight: 600;
-                font-size: 14px;
-                cursor: pointer;
-                transition: background-color 0.2s ease;
-            "
-            onmouseover="this.style.backgroundColor='#E03E3E';"
-            onmouseout="this.style.backgroundColor='#FF4B4B';"
-            >
-                {button_text}
-            </button>
+        st.markdown(
+    f"""
+    <a href="{auth_url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block; width: 100%;">
+        <div style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background-color: #FF4B4B;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            box-sizing: border-box;
+            cursor: pointer;
+        ">
+            {button_text}
         </div>
-        """
-
-        components.html(html_code, height=50)
+    </a>
+    """,
+    unsafe_allow_html=True,
+)
 
 # ===================================================
 # SESSION EXPIRED PANEL
