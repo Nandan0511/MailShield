@@ -277,6 +277,50 @@ def render_account_card():
 # LOGIN PANEL
 # ===================================================
 
+# def render_login_panel():
+#     accounts = st.session_state.get("accounts", [])
+
+#     st.markdown("### 👥 Gmail Accounts")
+
+#     # Existing accounts
+#     if accounts:
+#         selected = st.selectbox(
+#             "📂 Select Account",
+#             accounts + ["➕ Add New Gmail"],
+#             key="account_selector",
+#         )
+
+#         if selected != "➕ Add New Gmail":
+#             if st.button("🔐 Login", use_container_width=True):
+#                 login_account(selected)
+#             return
+
+#     else:
+#         st.info("No Gmail accounts linked yet.")
+
+#     # OAuth login (First account OR Add new account)
+#     button_text = (
+#         "🔗 Connect Gmail"
+#         if accounts
+#         else "🔗 Connect First Gmail Account"
+#     )
+
+#     if st.button(
+#         button_text,
+#         key="google_oauth",
+#         use_container_width=True,
+#     ):
+#         auth_url = login_google()
+
+#         # Redirect current tab instead of opening a new one
+#         st.markdown(
+#             f"""
+#             <meta http-equiv="refresh" content="0; url={auth_url}">
+#             """,
+#             unsafe_allow_html=True,
+#         )
+
+#         st.stop()
 def render_login_panel():
     accounts = st.session_state.get("accounts", [])
 
@@ -294,7 +338,6 @@ def render_login_panel():
             if st.button("🔐 Login", use_container_width=True):
                 login_account(selected)
             return
-
     else:
         st.info("No Gmail accounts linked yet.")
 
@@ -305,23 +348,32 @@ def render_login_panel():
         else "🔗 Connect First Gmail Account"
     )
 
-    if st.button(
-        button_text,
-        key="google_oauth",
-        use_container_width=True,
-    ):
-        auth_url = login_google()
+    # 1. Generate the Google Auth URL upfront
+    auth_url = login_google()
 
-        # Redirect current tab instead of opening a new one
-        st.markdown(
-            f"""
-            <meta http-equiv="refresh" content="0; url={auth_url}">
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.stop()
-
+    # 2. Render an HTML link styled like a Streamlit button that breaks out to the top window
+    st.markdown(
+        f"""
+        <a href="{auth_url}" target="_top" style="text-decoration: none;">
+            <div style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                background-color: #FF4B4B;
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                font-weight: 600;
+                text-align: center;
+                cursor: pointer;
+            ">
+                {button_text}
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
 # ===================================================
 # SESSION EXPIRED PANEL
 # ===================================================
