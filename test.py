@@ -1,9 +1,13 @@
-from config import (
-    CLIENT_ID,
-    SCOPES,
+from oauth_google import login_google
+import streamlit as st
 
-    get_redirect_uri,
+auth_url = login_google()
+
+st.link_button("Open Google", auth_url)
+
+st.markdown(
+    f'<a href="{auth_url}" target="_blank">HTML Link</a>',
+    unsafe_allow_html=True,
 )
-print("CLIENT_ID:", CLIENT_ID)
-print("REDIRECT_URI:", get_redirect_uri())
-print("SCOPES:", SCOPES)
+
+st.code(auth_url)
