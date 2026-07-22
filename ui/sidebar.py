@@ -321,12 +321,67 @@ def render_account_card():
 #         )
 
 #         st.stop()
+# def render_login_panel():
+#     accounts = st.session_state.get("accounts", [])
+
+#     st.markdown("### 👥 Gmail Accounts")
+
+#     # Existing accounts
+#     if accounts:
+#         selected = st.selectbox(
+#             "📂 Select Account",
+#             accounts + ["➕ Add New Gmail"],
+#             key="account_selector",
+#         )
+
+#         if selected != "➕ Add New Gmail":
+#             if st.button("🔐 Login", use_container_width=True):
+#                 login_account(selected)
+#             return
+#     else:
+#         st.info("No Gmail accounts linked yet.")
+
+#     # OAuth login (First account OR Add new account)
+#     button_text = (
+#         "🔗 Connect Gmail"
+#         if accounts
+#         else "🔗 Connect First Gmail Account"
+#     )
+
+#     # 1. Generate the Google Auth URL upfront
+#     auth_url = login_google()
+
+#     # 2. Render an HTML link styled like a Streamlit button that breaks out to the top window
+#     st.markdown(
+#         f"""
+#         <a href="{auth_url}" target="_top" style="text-decoration: none; display: block; width: 100%;">
+#             <div style="
+#                 display: flex;
+#                 align-items: center;
+#                 justify-content: center;
+#                 width: 100%;
+#                 background-color: #FF4B4B;
+#                 color: white;
+#                 padding: 10px;
+#                 border-radius: 8px;
+#                 font-weight: 600;
+#                 text-align: center;
+#                 cursor: pointer;
+#             ">
+#                 {button_text}
+#             </div>
+#         </a>
+#         """,
+#         unsafe_allow_html=True,
+#     )
 def render_login_panel():
     accounts = st.session_state.get("accounts", [])
 
     st.markdown("### 👥 Gmail Accounts")
 
-    # Existing accounts
+    # Flag to determine if we should render the OAuth button
+    show_oauth_button = False
+
     if accounts:
         selected = st.selectbox(
             "📂 Select Account",
@@ -337,43 +392,47 @@ def render_login_panel():
         if selected != "➕ Add New Gmail":
             if st.button("🔐 Login", use_container_width=True):
                 login_account(selected)
-            return
+            return  # Stop here if an existing account is chosen
+        else:
+            # User explicitly chose "➕ Add New Gmail"
+            show_oauth_button = True
     else:
         st.info("No Gmail accounts linked yet.")
+        show_oauth_button = True
 
-    # OAuth login (First account OR Add new account)
-    button_text = (
-        "🔗 Connect Gmail"
-        if accounts
-        else "🔗 Connect First Gmail Account"
-    )
+    # Render OAuth button whenever show_oauth_button is True
+    if show_oauth_button:
+        button_text = (
+            "🔗 Connect Gmail"
+            if accounts
+            else "🔗 Connect First Gmail Account"
+        )
 
-    # 1. Generate the Google Auth URL upfront
-    auth_url = login_google()
+        auth_url = login_google()
 
-    # 2. Render an HTML link styled like a Streamlit button that breaks out to the top window
-    st.markdown(
-        f"""
-        <a href="{auth_url}" target="_top" style="text-decoration: none; display: block; width: 100%;">
-            <div style="
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                background-color: #FF4B4B;
-                color: white;
-                padding: 10px;
-                border-radius: 8px;
-                font-weight: 600;
-                text-align: center;
-                cursor: pointer;
-            ">
-                {button_text}
-            </div>
-        </a>
-        """,
-        unsafe_allow_html=True,
-    )
+        st.markdown(
+            f"""
+            <a href="{auth_url}" target="_top" style="text-decoration: none; display: block; width: 100%;">
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    background-color: #FF4B4B;
+                    color: white;
+                    padding: 10px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    text-align: center;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                ">
+                    {button_text}
+                </div>
+            </a>
+            """,
+            unsafe_allow_html=True,
+        )
 # ===================================================
 # SESSION EXPIRED PANEL
 # ===================================================
