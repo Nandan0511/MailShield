@@ -432,15 +432,36 @@ def render_login_panel():
         if st.button("↻  I've finished signing in", use_container_width=True):
             device_id = st.session_state.get("device_id")
 
+            st.write("DEBUG device_id:", device_id)
+
             from utils.session import get_accounts_for_device, get_most_recent_account
-            st.session_state["accounts"] = get_accounts_for_device(device_id)
+            found_accounts = get_accounts_for_device(device_id)
+
+            st.write("DEBUG accounts found on disk:", found_accounts)
+
+            st.session_state["accounts"] = found_accounts
 
             newest_email = get_most_recent_account(device_id)
+
+            st.write("DEBUG newest_email:", newest_email)
 
             if newest_email:
                 login_account(newest_email)
             else:
                 st.rerun()
+
+        # if st.button("↻  I've finished signing in", use_container_width=True):
+        #     device_id = st.session_state.get("device_id")
+
+        #     from utils.session import get_accounts_for_device, get_most_recent_account
+        #     st.session_state["accounts"] = get_accounts_for_device(device_id)
+
+        #     newest_email = get_most_recent_account(device_id)
+
+        #     if newest_email:
+        #         login_account(newest_email)
+        #     else:
+        #         st.rerun()
 # ===================================================
 # SESSION EXPIRED PANEL
 # ===================================================
