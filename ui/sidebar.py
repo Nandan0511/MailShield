@@ -444,7 +444,7 @@ def render_login_panel():
             newest_email = get_most_recent_account(device_id)
 
             st.write("DEBUG newest_email:", newest_email)
-            # st.stop() 
+            st.stop()
 
             if newest_email:
                 login_account(newest_email)
