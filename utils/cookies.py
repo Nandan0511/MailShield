@@ -53,6 +53,7 @@ def get_device_id():
     """
 
     existing = st.context.cookies.get("mailshield_device_id")
+    st.write("DEBUG existing cookie:", existing)
 
     if existing:
         return existing
@@ -69,7 +70,7 @@ def get_device_id():
     components.html(
         f"""
         <script>
-        document.cookie = "mailshield_device_id={device_id}; path=/; max-age=31536000; SameSite=Lax";
+        document.cookie = "mailshield_device_id={device_id}; path=/; max-age=31536000; SameSite=Lax ;Secure";
         </script>
         """,
         height=0,
