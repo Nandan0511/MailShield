@@ -70,7 +70,7 @@ def get_device_id():
     components.html(
         f"""
         <script>
-        document.cookie = "mailshield_device_id={device_id}; path=/; max-age=31536000; SameSite=Lax ;Secure";
+        document.cookie = "mailshield_device_id={device_id}; path=/; max-age=31536000; SameSite=Lax; Secure";
         </script>
         """,
         height=0,
