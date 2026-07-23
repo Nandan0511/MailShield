@@ -16,6 +16,7 @@ from oauth_google import login_google
 #     initialize_session_state
 # )
 
+from utils.session import get_accounts_for_device
 from utils.token_utils import (
     remove_readonly
 )
@@ -277,160 +278,169 @@ def render_account_card():
 # LOGIN PANEL
 # ===================================================
 
-# def render_login_panel():
-#     accounts = st.session_state.get("accounts", [])
-
-#     st.markdown("### 👥 Gmail Accounts")
-
-#     # Existing accounts
-#     if accounts:
-#         selected = st.selectbox(
-#             "📂 Select Account",
-#             accounts + ["➕ Add New Gmail"],
-#             key="account_selector",
-#         )
-
-#         if selected != "➕ Add New Gmail":
-#             if st.button("🔐 Login", use_container_width=True):
-#                 login_account(selected)
-#             return
-
-#     else:
-#         st.info("No Gmail accounts linked yet.")
-
-#     # OAuth login (First account OR Add new account)
-#     button_text = (
-#         "🔗 Connect Gmail"
-#         if accounts
-#         else "🔗 Connect First Gmail Account"
-#     )
-
-#     if st.button(
-#         button_text,
-#         key="google_oauth",
-#         use_container_width=True,
-#     ):
-#         auth_url = login_google()
-
-#         # Redirect current tab instead of opening a new one
-#         st.markdown(
-#             f"""
-#             <meta http-equiv="refresh" content="0; url={auth_url}">
-#             """,
-#             unsafe_allow_html=True,
-#         )
-
-#         st.stop()
-# def render_login_panel():
-#     accounts = st.session_state.get("accounts", [])
-
-#     st.markdown("### 👥 Gmail Accounts")
-
-#     # Existing accounts
-#     if accounts:
-#         selected = st.selectbox(
-#             "📂 Select Account",
-#             accounts + ["➕ Add New Gmail"],
-#             key="account_selector",
-#         )
-
-#         if selected != "➕ Add New Gmail":
-#             if st.button("🔐 Login", use_container_width=True):
-#                 login_account(selected)
-#             return
-#     else:
-#         st.info("No Gmail accounts linked yet.")
-
-#     # OAuth login (First account OR Add new account)
-#     button_text = (
-#         "🔗 Connect Gmail"
-#         if accounts
-#         else "🔗 Connect First Gmail Account"
-#     )
-
-#     # 1. Generate the Google Auth URL upfront
-#     auth_url = login_google()
-
-#     # 2. Render an HTML link styled like a Streamlit button that breaks out to the top window
-#     st.markdown(
-#         f"""
-#         <a href="{auth_url}" target="_top" style="text-decoration: none; display: block; width: 100%;">
-#             <div style="
-#                 display: flex;
-#                 align-items: center;
-#                 justify-content: center;
-#                 width: 100%;
-#                 background-color: #FF4B4B;
-#                 color: white;
-#                 padding: 10px;
-#                 border-radius: 8px;
-#                 font-weight: 600;
-#                 text-align: center;
-#                 cursor: pointer;
-#             ">
-#                 {button_text}
-#             </div>
-#         </a>
-#         """,
-#         unsafe_allow_html=True,
-#     )
 def render_login_panel():
-    accounts = st.session_state.get("accounts", [])
 
-    st.markdown("### 👥 Gmail Accounts")
+    accounts = st.session_state.get(
+        "accounts",
+        []
+    )
+
+    st.markdown(
+        "### 👥 Gmail Accounts"
+    )
 
     show_oauth_button = False
+    button_text = "Connect First Gmail Account"
 
+    # -----------------------------------------------
+    # EXISTING ACCOUNTS
+    # -----------------------------------------------
     if accounts:
-        selected = st.selectbox(
+
+        selected_account = st.selectbox(
             "📂 Select Account",
             accounts + ["➕ Add New Gmail"],
-            key="account_selector",
+            key="account_selector"
         )
 
-        if selected != "➕ Add New Gmail":
-            if st.button("🔐 Login", use_container_width=True):
-                login_account(selected)
-            return
+        if selected_account != "➕ Add New Gmail":
+
+            if st.button(
+                "🔐 Login",
+                use_container_width=True
+            ):
+                login_account(selected_account)
+
         else:
             show_oauth_button = True
+            button_text = "Connect Gmail"
+
+    # -----------------------------------------------
+    # FIRST LOGIN — polished empty state
+    # -----------------------------------------------
     else:
-        st.info("No Gmail accounts linked yet.")
+
+        st.markdown(
+            """
+            <style>
+            .ms-empty-card {
+                background: linear-gradient(180deg, rgba(79,124,255,0.08), rgba(139,92,246,0.04));
+                border: 1px solid rgba(139, 109, 255, 0.25);
+                border-radius: 16px;
+                padding: 26px 18px 20px 18px;
+                text-align: center;
+                margin-bottom: 6px;
+            }
+            .ms-empty-icon {
+                width: 48px;
+                height: 48px;
+                margin: 0 auto 12px auto;
+                border-radius: 13px;
+                background: linear-gradient(135deg, #4F7CFF, #8B5CF6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 23px;
+                box-shadow: 0 6px 16px rgba(99, 73, 255, 0.35);
+            }
+            .ms-empty-title {
+                font-size: 14.5px;
+                font-weight: 600;
+                color: rgba(255,255,255,0.92);
+                margin-bottom: 4px;
+            }
+            .ms-empty-sub {
+                font-size: 12px;
+                color: rgba(255,255,255,0.5);
+                line-height: 1.5;
+                margin: 0;
+            }
+            </style>
+
+            <div class="ms-empty-card">
+                <div class="ms-empty-icon">🛡️</div>
+                <div class="ms-empty-title">No Gmail account connected</div>
+                <p class="ms-empty-sub">Connect an account to start scanning for spam.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
         show_oauth_button = True
 
+    # -----------------------------------------------
+    # OAUTH POPUP BUTTON
+    # -----------------------------------------------
     if show_oauth_button:
-        button_text = (
-            "🔗 Connect Gmail"
-            if accounts
-            else "🔗 Connect First Gmail Account"
-        )
 
         auth_url = login_google()
 
-        st.markdown(
+        components.html(
     f"""
-    <a href="{auth_url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block; width: 100%;">
-        <div style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            background-color: #FF4B4B;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-align: center;
-            box-sizing: border-box;
-            cursor: pointer;
-        ">
-            {button_text}
-        </div>
-    </a>
+    <style>
+    .ms-connect-btn {{
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        background: linear-gradient(135deg, #4F7CFF, #8B5CF6);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        line-height: 1.3;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(99, 73, 255, 0.3);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        white-space: normal;
+        word-wrap: break-word;
+    }}
+    .ms-connect-btn:hover {{
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(99, 73, 255, 0.4);
+    }}
+    </style>
+    <button class="ms-connect-btn" onclick="
+        var w = 500, h = 600;
+        var left = (screen.width/2) - (w/2);
+        var top = (screen.height/2) - (h/2);
+        window.open(
+            '{auth_url}',
+            'mailshield_oauth',
+            'width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',resizable=yes,scrollbars=yes'
+        );
+        window.parent.postMessage({{type: 'mailshield_oauth_opened'}}, '*');
+    ">
+        🔐 {button_text}
+    </button>
     """,
-    unsafe_allow_html=True,
+    height=72,
 )
 
+    
+
+
+        st.markdown(
+            """
+            <p style="font-size: 11px; color: rgba(255,255,255,0.4); text-align:center; margin: 4px 0 12px 0;">
+            Opens a small window for Google sign-in
+            </p>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        if st.button("↻  I've finished signing in", use_container_width=True):
+            device_id = st.session_state.get("device_id")
+
+            from utils.session import get_accounts_for_device, get_most_recent_account
+            st.session_state["accounts"] = get_accounts_for_device(device_id)
+
+            newest_email = get_most_recent_account(device_id)
+
+            if newest_email:
+                login_account(newest_email)
+            else:
+                st.rerun()
 # ===================================================
 # SESSION EXPIRED PANEL
 # ===================================================
