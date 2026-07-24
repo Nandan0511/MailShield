@@ -55,6 +55,8 @@ def get_accounts_for_device(device_id):
 # ---------------------------------------------------
 def initialize_session_state():
 
+    st.write("DEBUG cookies seen:", dict(st.context.cookies))
+
     # -----------------------------------------------
     # RESOLVE DEVICE ID FIRST — "accounts" below
     # depends on it being available already
